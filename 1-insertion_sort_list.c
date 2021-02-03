@@ -10,53 +10,31 @@
 
 void insertion_sort_list(listint_t **list)
 {
-	int n;
-	listint_t *current_n;
+	listint_t *tempo = NULL, *current = NULL, *n_tmp = NULL;
 
-	current_n = *list;
-
-	if (current_n->next == NULL)
+	if (!list)
 		return;
-
-	listint_t *pointer = NULL, *tempo = NULL;
-
-	current_n = current_n->next;
-
-	while (current_n != NULL)
+	for (current = *list; current; current = current->next)
 	{
-		n = 0;
-		pointer = current_n;
-		tempo = current_n->prev;
-		current_n = current_n->next;
-
-		while (tempo != NULL && tempo->n > pointer->n)
+		for (tempo = current->prev; tempo; tempo = tempo->prev)
 		{
-			n++;
-			tempo = tempo->prev;
-		}
-
-		if (n)
-		{
-			pointer->prev->next = pointer->next;
-			if (pointer->next != NULL)
-			pointer->next->prev = pointer->prev;
-
-			if (tempo == NULL)
+			if (current->n < tempo->n)
 			{
-				tempo  = *list;
-				pointer->prev = NULL;
-				pointer->next = tempo;
-				pointer->next->prev = pointer;
-				*list = pointer;
+				if (current->next)
+					current->next->prev = tempo;
+				tempo->next = current->next;
+				n_tmp = tempo->prev;
+				tempo->prev = current;
+				current->next = tempo;
+				current->prev = n_tmp;
+				if (n_tmp)
+					n_tmp->next = current;
+				else
+					*list = current;
+				tempo = tempo->prev;
 			}
 			else
-			{
-				tempo = tempo->next;
-				tempo->prev->next = pointer;
-				pointer->prev = tempo->prev;
-				tempo->prev = pointer;
-				pointer->next = tempo;
-			}
+				break;
 			print_list(*list);
 		}
 	}
