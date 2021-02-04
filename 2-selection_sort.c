@@ -12,32 +12,23 @@
 
 void selection_sort(int *array, size_t size)
 {
-	int x = 0, y = 0, min_idx = 0, copy = 0;
+	size_t x = 0, y = 0, tempo = 0, min_idx = 0;
 
-	copy = size;
-	for (x = 0; x < copy - 1; x++)
+	if (!array)
+		return;
+	for (x = 0; x < size - 1; x++)
 	{
 		min_idx = x;
-			for (y = x + 1; y < copy; y++)
-				if (array[y] < array[min_idx])
-					min_idx = y;
-	swap_ints(&array[min_idx], &array[x]);
-	print_array(array, copy);
+		for (y = x + 1; y < size; y++)
+			if (array[min_idx] > array[y])
+				min_idx = y;
+
+		if (min_idx != x)
+		{
+			tempo = array[x];
+			array[x] = array[min_idx];
+			array[min_idx] = tempo;
+			print_array(array, size);
+		}
 	}
-}
-
-
-/**
- * swap_ints - Swap two integers in an array.
- * @x: The first integer to swap.
- * @y: The second integer to swap.
- */
-
-void swap_ints(int *x, int *y)
-{
-	int tempo;
-
-	tempo = *x;
-	*x = *y;
-	*y = tempo;
 }
